@@ -2,9 +2,12 @@
 package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
+@RequestMapping("/api/v1")
 public class UserController {
 
 // Step2 : dev Branch 로 변경후 Src 편집 및 Commit and Push
@@ -39,7 +42,7 @@ public class UserController {
 
     private static final String EMPLOYEE_ID = "82188379"; // 조우철님 사번
 
-    @GetMapping("/api/v1/user")
+    @GetMapping("user")
     public String getUserId() {
         return EMPLOYEE_ID;
     }
