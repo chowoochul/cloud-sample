@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 env:
   IMAGE_NAME: cloud-sample
-  
+  LOGIN_SERVER: acrcloudbizcecomm.azurecr.io
 
 jobs:
   build:
@@ -35,29 +35,29 @@ jobs:
     - name: 'ACR login'
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ secrets.BASEACR_LOGIN_SERVER }}
+        login-server: ${{ env.BASEACR_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: 'Build & Tag Image'
       run: |
             docker build -t ${{ secrets.BASEACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }} -f Dockerfile-maven .
-            docker tag ${{ secrets.BASEACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }} ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
+            docker tag ${{ secrets.BASEACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }} ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
 
     - name: 'Push image'
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ secrets.STAPACR_LOGIN_SERVER }}
+        login-server: ${{ env.LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: |
-          docker push ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
+          docker push ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
 
     # - name: Update Kubernetes resources
     #   run: |
     #       cd manifests/overlays/prod
-    #       kustomize edit set image ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
+    #       kustomize edit set image ${{ env.LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
     #       cat kustomization.yaml
 
     # - name: Commit files
