@@ -6,6 +6,7 @@ env:
   IMAGE_NAME: cloud-sample
   LOGIN_SERVER: acrcloudbizcecomm.azurecr.io
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
