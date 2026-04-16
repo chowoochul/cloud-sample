@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 env:
   REGISTRY: acrcloudbizcecomm.azurecr.io
-  IMAGE_NAME: 82210865/cloud-sample
+  IMAGE_NAME: cloud-sample
 
 jobs:
   build:
